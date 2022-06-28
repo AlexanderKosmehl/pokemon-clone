@@ -7,7 +7,7 @@ interface Collidable {
   height: number
 }
 
-function rectangularCollision(
+export function rectangularCollision(
   rectangle1: Collidable,
   rectangle2: Collidable
 ): boolean {

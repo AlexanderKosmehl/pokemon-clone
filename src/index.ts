@@ -1,12 +1,15 @@
 import './style.css'
 import mapImageURI from './img/pokemonCloneMap.png'
 import foregroundLayerURI from './img/pokemonCloneMapForeground.png'
-import playerFrontURI from './img/playerDown.png'
+import playerDownURI from './img/playerDown.png'
+import playerUpURI from './img/playerUp.png'
+import playerLeftURI from './img/playerLeft.png'
+import playerRightURI from './img/playerRight.png'
 
 import { collisions } from './collisions'
 import { Sprite } from './Sprite'
 import { Boundary } from './Boundary'
-import { predictCollision } from './CollisionHelper'
+import { predictCollision, rectangularCollision } from './CollisionHelper'
 import {
   CANVAS_HEIGHT,
   CANVAS_WIDTH,
@@ -18,6 +21,8 @@ import {
   PLAYER_SPEED,
   SHOW_COLLIDERS,
 } from './Settings'
+import { battlePatches } from './battlePatches'
+import gsap from 'gsap'
 
 const canvas = document.querySelector('canvas')!
 const ctx = canvas.getContext('2d')!
@@ -31,8 +36,14 @@ mapImage.src = mapImageURI
 const foregroundImage = new Image()
 foregroundImage.src = foregroundLayerURI
 
-const playerImage = new Image()
-playerImage.src = playerFrontURI
+const playerUpImage = new Image()
+playerUpImage.src = playerUpURI
+const playerDownImage = new Image()
+playerDownImage.src = playerDownURI
+const playerLeftImage = new Image()
+playerLeftImage.src = playerLeftURI
+const playerRightImage = new Image()
+playerRightImage.src = playerRightURI
 
 const collisionArrays = []
 for (let y = 0; y < MAP_ROWS; y++) {
@@ -44,6 +55,30 @@ collisionArrays.forEach((row, rowIndex) =>
   row.forEach((entry, colIndex) => {
     if (entry === 1025) {
       boundaries.push(
+        new Boundary({
+          position: {
+            x: colIndex * Boundary.size + INITIAL_X_OFFSET,
+            y: rowIndex * Boundary.size + INITIAL_Y_OFFSET,
+          },
+          context: ctx,
+        })
+      )
+    }
+  })
+)
+
+const battlePatchArrays = []
+for (let y = 0; y < MAP_ROWS; y++) {
+  battlePatchArrays.push(
+    battlePatches.slice(y * MAP_COLS, y * MAP_COLS + MAP_COLS)
+  )
+}
+
+const battleZones: Boundary[] = []
+battlePatchArrays.forEach((row, rowIndex) =>
+  row.forEach((entry, colIndex) => {
+    if (entry === 1025) {
+      battleZones.push(
         new Boundary({
           position: {
             x: colIndex * Boundary.size + INITIAL_X_OFFSET,
@@ -75,9 +110,15 @@ const player = new Sprite({
     x: canvas.width / 2 - 192 / 4 / 2,
     y: canvas.height / 2 - 68 / 2,
   },
-  image: playerImage,
+  image: playerDownImage,
   frames: { max: 4 },
   context: ctx,
+  sprites: {
+    up: playerUpImage,
+    down: playerDownImage,
+    left: playerLeftImage,
+    right: playerRightImage,
+  },
 })
 
 let keys = {
@@ -95,27 +136,68 @@ let keys = {
   },
 }
 
-const movables = [background, foreground, ...boundaries]
+const movables = [background, foreground, ...battleZones, ...boundaries]
+
+const battle = {
+  initiated: false,
+}
 
 /*
   Animation Loop
 */
 
 function animate() {
-  window.requestAnimationFrame(animate)
+  // Get animationId to cancel animation later
+  const animationId = window.requestAnimationFrame(animate)
+
   background.draw()
-
-  if (SHOW_COLLIDERS) boundaries.forEach((boundary) => boundary.draw())
-
   player.draw()
-
   foreground.draw()
+
+  // Show debug colliders
+  if (SHOW_COLLIDERS) {
+    boundaries.forEach((boundary) => boundary.draw())
+    battleZones.forEach((zone) => zone.draw())
+  }
+
+  // Check for battle activation
+
+  if (battle.initiated) return
+
+  if (
+    player.moving &&
+    battleZones.some((zone) => rectangularCollision(player, zone)) &&
+    Math.random() < 0.01
+  ) {
+    console.log('Battle!')
+    window.cancelAnimationFrame(animationId)
+    player.moving = false
+    battle.initiated = true
+
+    gsap.to('.battle-overlay', {
+      opacity: 1,
+      repeat: 5,
+      yoyo: true,
+      duration: 0.1,
+      onComplete: () => {
+        gsap.to('.battle-overlay', {
+          opacity: 1,
+          duration: 0.1,
+        })
+
+        animateBattle()
+      },
+    })
+    return
+  }
 
   // Movement
   if (
     keys.up.isPressed &&
     !boundaries.some((boundary) => predictCollision('up', player, boundary))
   ) {
+    player.moving = true
+    player.image = player.sprites.up
     movables.forEach((movable) => {
       movable.position.y += PLAYER_SPEED
     })
@@ -123,6 +205,8 @@ function animate() {
     keys.left.isPressed &&
     !boundaries.some((boundary) => predictCollision('left', player, boundary))
   ) {
+    player.moving = true
+    player.image = player.sprites.left
     movables.forEach((movable) => {
       movable.position.x += PLAYER_SPEED
     })
@@ -130,6 +214,8 @@ function animate() {
     keys.down.isPressed &&
     !boundaries.some((boundary) => predictCollision('down', player, boundary))
   ) {
+    player.moving = true
+    player.image = player.sprites.down
     movables.forEach((movable) => {
       movable.position.y -= PLAYER_SPEED
     })
@@ -137,10 +223,19 @@ function animate() {
     keys.right.isPressed &&
     !boundaries.some((boundary) => predictCollision('right', player, boundary))
   ) {
+    player.image = player.sprites.right
+    player.moving = true
     movables.forEach((movable) => {
       movable.position.x -= PLAYER_SPEED
     })
+  } else {
+    player.moving = false
   }
+}
+
+function animateBattle() {
+  window.requestAnimationFrame(animateBattle)
+  
 }
 
 /*

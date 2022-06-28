@@ -10,3 +10,19 @@ body {
 canvas {
   image-rendering: pixelated;
 }
+
+.game-container {
+  position: relative;
+  display: inline-block;
+}
+
+.battle-overlay {
+  position: absolute;
+  pointer-events: none;
+  background-color: black;
+  opacity: 0;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
