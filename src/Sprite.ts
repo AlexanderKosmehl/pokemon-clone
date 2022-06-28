@@ -1,8 +1,6 @@
 import { Position } from './Position'
-import gsap from 'gsap'
-import fireballURI from './img/fireball.png'
 
-interface Props {
+export interface SpriteProps {
   position: Position
   image: HTMLImageElement
   frames?: { max: number; hold: number }
@@ -15,7 +13,6 @@ interface Props {
     right: HTMLImageElement
   }
   animate?: boolean
-  isEnemy?: boolean
   rotation?: number
 }
 
@@ -40,8 +37,6 @@ export class Sprite {
     right: HTMLImageElement
   }
   opacity: number = 1
-  health: number = 100
-  isEnemy?: boolean
   rotation: number
 
   constructor({
@@ -52,9 +47,8 @@ export class Sprite {
     context,
     sprites,
     animate = false,
-    isEnemy = false,
     rotation = 0,
-  }: Props) {
+  }: SpriteProps) {
     this.position = position
     this.image = image
     this.frames = { ...frames, val: 0, elapsed: 0 }
@@ -62,7 +56,6 @@ export class Sprite {
     this.context = context
     this.sprites = sprites
     this.animate = animate
-    this.isEnemy = isEnemy
     this.rotation = rotation
 
     this.image.onload = () => {
@@ -108,96 +101,5 @@ export class Sprite {
       this.frames.elapsed === 0
         ? (this.frames.val + 1) % this.frames.max
         : this.frames.val
-  }
-
-  attack(attack: any, recipient: Sprite, renderedSprites: Sprite[]) {
-    const healthBar = this.isEnemy
-      ? '.enemy-health-bar-current'
-      : '.player-health-bar-current'
-
-    switch (attack.name) {
-      case 'Tackle': {
-        const movementDistance = this.isEnemy ? 20 : -20
-
-        const tl = gsap.timeline()
-        tl.to(this.position, {
-          x: this.position.x - movementDistance,
-        })
-          .to(this.position, {
-            x: this.position.x + movementDistance * 2,
-            duration: 0.1,
-            onComplete: () => {
-              this.health =
-                attack.damage > this.health ? 0 : this.health - attack.damage
-
-              gsap.to('.enemy-health-bar-current', {
-                width: this.health + '%',
-              })
-
-              gsap.to(recipient.position, {
-                x: recipient.position.x + movementDistance / 2,
-                yoyo: true,
-                repeat: 5,
-                duration: 0.08,
-              })
-
-              gsap.to(recipient, {
-                opacity: 0,
-              })
-            },
-          })
-          .to(this.position, {
-            x: this.position.x,
-          })
-        break
-      }
-      case 'Fireball': {
-        const fireballImage = new Image()
-        fireballImage.src = fireballURI
-        const fireball = new Sprite({
-          position: {
-            x: this.position.x,
-            y: this.position.y,
-          },
-          image: fireballImage,
-          context: this.context,
-          frames: {
-            max: 4,
-            hold: 10,
-          },
-          animate: true,
-          rotation: this.isEnemy ? -2.2 : 1,
-        })
-        renderedSprites.push(fireball)
-
-        gsap.to(fireball.position, {
-          x: recipient.position.x,
-          y: recipient.position.y,
-          onComplete: () => {
-            renderedSprites.pop()
-
-            this.health =
-              attack.damage > this.health ? 0 : this.health - attack.damage
-
-            gsap.to('.enemy-health-bar-current', {
-              width: this.health + '%',
-            })
-
-            gsap.to(recipient.position, {
-              x: recipient.position.x + 20 / 2,
-              yoyo: true,
-              repeat: 5,
-              duration: 0.08,
-            })
-
-            if (this.health === 0) {
-              gsap.to(recipient, {
-                opacity: 0,
-              })
-            }
-          },
-        })
-      }
-    }
   }
 }

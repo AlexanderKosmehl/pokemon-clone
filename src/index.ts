@@ -5,9 +5,6 @@ import playerDownURI from './img/playerDown.png'
 import playerUpURI from './img/playerUp.png'
 import playerLeftURI from './img/playerLeft.png'
 import playerRightURI from './img/playerRight.png'
-import battleBackgroundURI from './img/battleBackground.png'
-import draggleURI from './img/draggleSprite.png'
-import embyURI from './img/embySprite.png'
 
 import { collisions } from './collisions'
 import { Sprite } from './Sprite'
@@ -26,7 +23,7 @@ import {
 } from './Settings'
 import { battlePatches } from './battlePatches'
 import { animateBattleActivation } from './AnimationHelper'
-import { attacks } from './attacks'
+import { animateBattle } from './battleScene'
 
 const canvas = document.querySelector('canvas')!
 const ctx = canvas.getContext('2d')!
@@ -224,58 +221,6 @@ function animate() {
   }
 }
 
-const battleBackgroundImage = new Image()
-battleBackgroundImage.src = battleBackgroundURI
-
-const draggleImage = new Image()
-draggleImage.src = draggleURI
-
-const embyImage = new Image()
-embyImage.src = embyURI
-
-const draggle = new Sprite({
-  position: {
-    x: 800,
-    y: 100,
-  },
-  image: draggleImage,
-  frames: { max: 4, hold: 30 },
-  animate: true,
-  context: ctx,
-  isEnemy: true
-})
-
-const emby = new Sprite({
-  position: {
-    x: 280,
-    y: 325,
-  },
-  image: embyImage,
-  frames: { max: 4, hold: 10 },
-  animate: true,
-  context: ctx,
-})
-
-const battleBackground = new Sprite({
-  position: { x: 0, y: 0 },
-  image: battleBackgroundImage,
-  context: ctx,
-})
-
-const renderedSprites: Sprite[] = [draggle, emby]
-
-function handleAttack(attackIndex: number) {
-  emby.attack(attacks[attackIndex], draggle, renderedSprites)
-}
-
-function animateBattle() {
-  window.requestAnimationFrame(animateBattle)
-  battleBackground.draw()
-  draggle.draw()
-  renderedSprites.forEach(sprite => sprite.draw())
-  emby.draw()
-}
-
 /*
   Click Listener
 */
@@ -320,13 +265,6 @@ window.addEventListener('keyup', (e: KeyboardEvent) => {
       keys.right.isPressed = false
       break
   }
-})
-
-document.querySelectorAll('button').forEach((button, index) => {
-  button.addEventListener('click', () => {
-    console.log('Clicked')
-    handleAttack(index)
-  })
 })
 
 animateBattle()
