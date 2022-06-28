@@ -5,10 +5,35 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Pokemon Clone</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <script defer src="./dist/main.js"></script>
   </head>
   <body>
-    <div class="battle-overlay"></div>
+    <div class="game-container">
+      <div class="battle-overlay"></div>
       <canvas></canvas>
-  </body>
+      <div class="enemy-info-container">
+        <h1>Draggle</h1>
+        <div class="health-bar">
+          <div class="enemy-health-bar-current"></div>
+        </div>
+      </div>
+      <div class="player-info-container">
+        <h1>Emby</h2>
+        <div class="health-bar">
+          <div class="player-health-bar-current"></div>
+        </div>
+      </div>
+      <div class="controls-container">
+        <div class="attack-container">
+        </div>
+        <div class="attack-type-container">
+          <h1>Attack Type</h1>
+        </div>
+        <div class="dialogue-box"></div>
+      </div>
+    </body>
+  </div>
 </html>
