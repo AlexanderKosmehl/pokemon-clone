@@ -25,8 +25,8 @@ import {
   SHOW_COLLIDERS,
 } from './Settings'
 import { battlePatches } from './battlePatches'
-import gsap from 'gsap'
 import { animateBattleActivation } from './AnimationHelper'
+import { attacks } from './attacks'
 
 const canvas = document.querySelector('canvas')!
 const ctx = canvas.getContext('2d')!
@@ -242,6 +242,7 @@ const draggle = new Sprite({
   frames: { max: 4, hold: 30 },
   animate: true,
   context: ctx,
+  isEnemy: true
 })
 
 const emby = new Sprite({
@@ -261,10 +262,17 @@ const battleBackground = new Sprite({
   context: ctx,
 })
 
+const renderedSprites: Sprite[] = [draggle, emby]
+
+function handleAttack(attackIndex: number) {
+  emby.attack(attacks[attackIndex], draggle, renderedSprites)
+}
+
 function animateBattle() {
   window.requestAnimationFrame(animateBattle)
   battleBackground.draw()
   draggle.draw()
+  renderedSprites.forEach(sprite => sprite.draw())
   emby.draw()
 }
 
@@ -312,6 +320,13 @@ window.addEventListener('keyup', (e: KeyboardEvent) => {
       keys.right.isPressed = false
       break
   }
+})
+
+document.querySelectorAll('button').forEach((button, index) => {
+  button.addEventListener('click', () => {
+    console.log('Clicked')
+    handleAttack(index)
+  })
 })
 
 animateBattle()

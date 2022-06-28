@@ -1,3 +1,5 @@
+import gsap from 'gsap'
+
 export function animateBattleActivation(next: () => void) {
   gsap.to('.battle-overlay', {
     opacity: 1,
