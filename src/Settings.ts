@@ -1,7 +1,7 @@
 // Player Settings
 export const PLAYER_SPEED = 4
-export const INITIAL_X_OFFSET = -225
-export const INITIAL_Y_OFFSET = -170
+export const INITIAL_X_OFFSET = -352
+export const INITIAL_Y_OFFSET = -240
 
 // Canvas Settings
 export const CANVAS_WIDTH = 1024

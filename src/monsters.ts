@@ -12,27 +12,29 @@ export const monsters = {
   Emby: {
     name: 'Emby',
     sprite: {
-      image: embyImage,
+      image: {
+        src: embyURI,
+      },
       frames: {
         max: 4,
         hold: 30,
       },
       animate: true,
     },
-    attacks: [attacks.Tackle, attacks.Fireball]
+    attacks: [attacks.Tackle, attacks.Fireball],
   },
   Draggle: {
     name: 'Draggle',
     sprite: {
-      image: draggleImage,
+      image: {
+        src: draggleURI,
+      },
       frames: {
         max: 4,
         hold: 30,
       },
       animate: true,
     },
-    attacks: [
-      attacks.Tackle
-    ]
+    attacks: [attacks.Tackle],
   },
 }

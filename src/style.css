@@ -22,6 +22,10 @@ canvas {
   user-select: none;
 }
 
+.battle-interface {
+  display: none;
+}
+
 .battle-overlay {
   position: absolute;
   pointer-events: none;
@@ -31,6 +35,7 @@ canvas {
   bottom: 0;
   left: 0;
   right: 0;
+  z-index: 10;
 }
 
 .enemy-info-container {
@@ -113,12 +118,24 @@ h1 {
   font-size: 16px;
 }
 
-.attack-type-container {
+.attack-info-container {
   width: 30%;
-  display: flex;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  justify-content: space-around;
   align-items: center;
   border-left: 4px solid black;
+  padding: 12px;
+  gap: 12px;
+}
+
+.attack-info-header {
+  grid-column: 1 / span 2;
+}
+
+.info-text-container {
+  display: flex;
+  justify-content: space-between;
 }
 
 .dialogue-box {
@@ -130,4 +147,76 @@ h1 {
   right: 0;
   background-color: white;
   padding: 12px;
+}
+
+.normal { 
+  color: #A8A77A; 
+}
+
+.fire { 
+  color: #EE8130; 
+}
+
+.water { 
+  color: #6390F0; 
+}
+
+.electric { 
+  color: #F7D02C; 
+}
+
+.grass { 
+  color: #7AC74C; 
+}
+
+.ice { 
+  color: #96D9D6; 
+}
+
+.fighting { 
+  color: #C22E28; 
+}
+
+.poison { 
+  color: #A33EA1; 
+}
+
+.ground { 
+  color: #E2BF65; 
+}
+
+.flying { 
+  color: #A98FF3; 
+}
+
+.psychic { 
+  color: #F95587; 
+}
+
+.bug { 
+  color: #A6B91A; 
+}
+
+.rock { 
+  color: #B6A136; 
+}
+
+.ghost { 
+  color: #735797; 
+}
+
+.dragon { 
+  color: #6F35FC; 
+}
+
+.dark { 
+  color: #705746; 
+}
+
+.steel { 
+  color: #B7B7CE; 
+}
+
+.fairy { 
+  color: #D685AD; 
 }

@@ -1,6 +1,7 @@
 import { Sprite, SpriteProps } from './Sprite'
 import gsap from 'gsap'
 import fireballURI from './img/fireball.png'
+import { Attack } from './Attack'
 
 interface MonsterProps extends SpriteProps {
   name?: string
@@ -38,11 +39,15 @@ export class Monster extends Sprite {
     this.isEnemy = isEnemy
   }
 
-  attack(attack: any, recipient: Sprite, renderedSprites: Sprite[]) {
+  attack(attack: Attack, recipient: Monster, renderedSprites: Sprite[]) {
     const dialogueBox = document.querySelector('.dialogue-box') as HTMLElement
     dialogueBox.style.display = 'block'
     dialogueBox.textContent = `${this.name} used ${attack.name}!`
 
+    recipient.health =
+      attack.damage > recipient.health ? 0 : recipient.health - attack.damage
+
+    // Target health bar
     const healthBar = this.isEnemy
       ? '.player-health-bar-current'
       : '.enemy-health-bar-current'
@@ -59,25 +64,18 @@ export class Monster extends Sprite {
             x: this.position.x + movementDistance * 2,
             duration: 0.1,
             onComplete: () => {
-              this.health =
-                attack.damage > this.health ? 0 : this.health - attack.damage
-
+              // Update health bar
               gsap.to(healthBar, {
-                width: this.health + '%',
+                width: recipient.health + '%',
               })
 
+              // Shake recipient
               gsap.to(recipient.position, {
                 x: recipient.position.x + movementDistance / 2,
                 yoyo: true,
                 repeat: 5,
                 duration: 0.08,
               })
-
-              if (this.health === 0) {
-                gsap.to(recipient, {
-                  opacity: 0,
-                })
-              }
             },
           })
           .to(this.position, {
@@ -110,11 +108,8 @@ export class Monster extends Sprite {
           onComplete: () => {
             renderedSprites.pop()
 
-            this.health =
-              attack.damage > this.health ? 0 : this.health - attack.damage
-
             gsap.to(healthBar, {
-              width: this.health + '%',
+              width: recipient.health + '%',
             })
 
             gsap.to(recipient.position, {
@@ -123,16 +118,21 @@ export class Monster extends Sprite {
               repeat: 5,
               duration: 0.08,
             })
-
-            console.log(this.health)
-            if (this.health === 0) {
-              gsap.to(recipient, {
-                opacity: 0,
-              })
-            }
           },
         })
       }
     }
+  }
+
+  faint() {
+    const dialogueBox = document.querySelector('.dialogue-box') as HTMLElement
+    dialogueBox.style.display = 'block'
+    dialogueBox.textContent = `${this.name} fainted!`
+    gsap.to(this.position, {
+      y: this.position.y + 20,
+    })
+    gsap.to(this, {
+      opacity: 0,
+    })
   }
 }

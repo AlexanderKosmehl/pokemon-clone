@@ -8,7 +8,7 @@ export function animateBattleActivation(next: () => void) {
     duration: 0.1,
     onComplete: () => {
       gsap.to('.battle-overlay', {
-        opacity: 1,
+        opacity: 0,
         duration: 0.1,
         onComplete: () => {
           next()

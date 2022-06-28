@@ -1,7 +1,7 @@
 const path = require('path')
 
 module.exports = {
-  mode: 'production',
+  mode: 'development',
   entry: './src/index.ts',
   module: {
     rules: [
@@ -33,4 +33,5 @@ module.exports = {
     },
     port: 3000,
   },
+  devtool: 'inline-source-map'
 }

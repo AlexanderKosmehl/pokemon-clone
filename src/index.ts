@@ -23,7 +23,7 @@ import {
 } from './Settings'
 import { battlePatches } from './battlePatches'
 import { animateBattleActivation } from './AnimationHelper'
-import { animateBattle } from './battleScene'
+import { animateBattle, initBattle } from './battleScene'
 
 const canvas = document.querySelector('canvas')!
 const ctx = canvas.getContext('2d')!
@@ -139,7 +139,7 @@ let keys = {
 
 const movables = [background, foreground, ...battleZones, ...boundaries]
 
-const battle = {
+export const battle = {
   initiated: false,
 }
 
@@ -147,7 +147,7 @@ const battle = {
   Animation Loop
 */
 
-function animate() {
+export function animate() {
   // Get animationId to cancel animation later
   const animationId = window.requestAnimationFrame(animate)
 
@@ -175,7 +175,8 @@ function animate() {
     player.animate = false
     battle.initiated = true
 
-    animateBattleActivation(animateBattle)
+    animateBattleActivation(initBattle)
+
     return
   }
 
@@ -267,4 +268,4 @@ window.addEventListener('keyup', (e: KeyboardEvent) => {
   }
 })
 
-animateBattle()
+animate()
