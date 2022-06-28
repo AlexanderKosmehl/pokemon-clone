@@ -5,6 +5,9 @@ import playerDownURI from './img/playerDown.png'
 import playerUpURI from './img/playerUp.png'
 import playerLeftURI from './img/playerLeft.png'
 import playerRightURI from './img/playerRight.png'
+import battleBackgroundURI from './img/battleBackground.png'
+import draggleURI from './img/draggleSprite.png'
+import embyURI from './img/embySprite.png'
 
 import { collisions } from './collisions'
 import { Sprite } from './Sprite'
@@ -23,6 +26,7 @@ import {
 } from './Settings'
 import { battlePatches } from './battlePatches'
 import gsap from 'gsap'
+import { animateBattleActivation } from './AnimationHelper'
 
 const canvas = document.querySelector('canvas')!
 const ctx = canvas.getContext('2d')!
@@ -111,7 +115,7 @@ const player = new Sprite({
     y: canvas.height / 2 - 68 / 2,
   },
   image: playerDownImage,
-  frames: { max: 4 },
+  frames: { max: 4, hold: 10 },
   context: ctx,
   sprites: {
     up: playerUpImage,
@@ -165,29 +169,16 @@ function animate() {
   if (battle.initiated) return
 
   if (
-    player.moving &&
+    player.animate &&
     battleZones.some((zone) => rectangularCollision(player, zone)) &&
     Math.random() < 0.01
   ) {
     console.log('Battle!')
     window.cancelAnimationFrame(animationId)
-    player.moving = false
+    player.animate = false
     battle.initiated = true
 
-    gsap.to('.battle-overlay', {
-      opacity: 1,
-      repeat: 5,
-      yoyo: true,
-      duration: 0.1,
-      onComplete: () => {
-        gsap.to('.battle-overlay', {
-          opacity: 1,
-          duration: 0.1,
-        })
-
-        animateBattle()
-      },
-    })
+    animateBattleActivation(animateBattle)
     return
   }
 
@@ -196,8 +187,8 @@ function animate() {
     keys.up.isPressed &&
     !boundaries.some((boundary) => predictCollision('up', player, boundary))
   ) {
-    player.moving = true
-    player.image = player.sprites.up
+    player.animate = true
+    player.image = player.sprites!.up
     movables.forEach((movable) => {
       movable.position.y += PLAYER_SPEED
     })
@@ -205,8 +196,8 @@ function animate() {
     keys.left.isPressed &&
     !boundaries.some((boundary) => predictCollision('left', player, boundary))
   ) {
-    player.moving = true
-    player.image = player.sprites.left
+    player.animate = true
+    player.image = player.sprites!.left
     movables.forEach((movable) => {
       movable.position.x += PLAYER_SPEED
     })
@@ -214,8 +205,8 @@ function animate() {
     keys.down.isPressed &&
     !boundaries.some((boundary) => predictCollision('down', player, boundary))
   ) {
-    player.moving = true
-    player.image = player.sprites.down
+    player.animate = true
+    player.image = player.sprites!.down
     movables.forEach((movable) => {
       movable.position.y -= PLAYER_SPEED
     })
@@ -223,19 +214,58 @@ function animate() {
     keys.right.isPressed &&
     !boundaries.some((boundary) => predictCollision('right', player, boundary))
   ) {
-    player.image = player.sprites.right
-    player.moving = true
+    player.image = player.sprites!.right
+    player.animate = true
     movables.forEach((movable) => {
       movable.position.x -= PLAYER_SPEED
     })
   } else {
-    player.moving = false
+    player.animate = false
   }
 }
 
+const battleBackgroundImage = new Image()
+battleBackgroundImage.src = battleBackgroundURI
+
+const draggleImage = new Image()
+draggleImage.src = draggleURI
+
+const embyImage = new Image()
+embyImage.src = embyURI
+
+const draggle = new Sprite({
+  position: {
+    x: 800,
+    y: 100,
+  },
+  image: draggleImage,
+  frames: { max: 4, hold: 30 },
+  animate: true,
+  context: ctx,
+})
+
+const emby = new Sprite({
+  position: {
+    x: 280,
+    y: 325,
+  },
+  image: embyImage,
+  frames: { max: 4, hold: 10 },
+  animate: true,
+  context: ctx,
+})
+
+const battleBackground = new Sprite({
+  position: { x: 0, y: 0 },
+  image: battleBackgroundImage,
+  context: ctx,
+})
+
 function animateBattle() {
   window.requestAnimationFrame(animateBattle)
-  
+  battleBackground.draw()
+  draggle.draw()
+  emby.draw()
 }
 
 /*
@@ -284,4 +314,4 @@ window.addEventListener('keyup', (e: KeyboardEvent) => {
   }
 })
 
-animate()
+animateBattle()

@@ -4,8 +4,8 @@ export const INITIAL_X_OFFSET = -225
 export const INITIAL_Y_OFFSET = -170
 
 // Canvas Settings
-export const CANVAS_WIDTH = 1280
-export const CANVAS_HEIGHT = 720
+export const CANVAS_WIDTH = 1024
+export const CANVAS_HEIGHT = 576
 
 // Map Settings
 export const MAP_SCALING = 4
