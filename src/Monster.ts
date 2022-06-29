@@ -2,6 +2,7 @@ import { Sprite, SpriteProps } from './Sprite'
 import gsap from 'gsap'
 import fireballURI from './img/fireball.png'
 import { Attack } from './Attack'
+import { audio } from './audio'
 
 interface MonsterProps extends SpriteProps {
   name?: string
@@ -69,6 +70,8 @@ export class Monster extends Sprite {
                 width: recipient.health + '%',
               })
 
+              audio.tackleHit.play()
+
               // Shake recipient
               gsap.to(recipient.position, {
                 x: recipient.position.x + movementDistance / 2,
@@ -101,6 +104,7 @@ export class Monster extends Sprite {
           rotation: this.isEnemy ? -2.2 : 1,
         })
         renderedSprites.push(fireball)
+        audio.initFireball.play()
 
         gsap.to(fireball.position, {
           x: recipient.position.x,
@@ -111,6 +115,8 @@ export class Monster extends Sprite {
             gsap.to(healthBar, {
               width: recipient.health + '%',
             })
+
+            audio.fireballHit.play()
 
             gsap.to(recipient.position, {
               x: recipient.position.x + 20 / 2,

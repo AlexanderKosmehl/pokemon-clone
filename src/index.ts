@@ -24,6 +24,7 @@ import {
 import { battlePatches } from './battlePatches'
 import { animateBattleActivation } from './AnimationHelper'
 import { animateBattle, initBattle } from './battleScene'
+import { audio } from './audio'
 
 const canvas = document.querySelector('canvas')!
 const ctx = canvas.getContext('2d')!
@@ -170,10 +171,12 @@ export function animate() {
     battleZones.some((zone) => rectangularCollision(player, zone)) &&
     Math.random() < 0.01
   ) {
-    console.log('Battle!')
     window.cancelAnimationFrame(animationId)
     player.animate = false
     battle.initiated = true
+    audio.map.stop()
+    audio.initBattle.play()
+    audio.battle.play()
 
     animateBattleActivation(initBattle)
 
@@ -266,6 +269,15 @@ window.addEventListener('keyup', (e: KeyboardEvent) => {
       keys.right.isPressed = false
       break
   }
+})
+
+
+let clicked = false
+window.addEventListener('click', () => {
+  if (clicked) return
+
+  audio.map.play()
+  clicked = true
 })
 
 animate()

@@ -6,6 +6,7 @@ import { monsters } from './monsters'
 import { Sprite } from './Sprite'
 
 import gsap from 'gsap'
+import { audio } from './audio'
 
 const canvas = document.querySelector('canvas')!
 const ctx = canvas.getContext('2d')!
@@ -78,11 +79,12 @@ export function initBattle() {
     const button = document.createElement('button')
     button.textContent = attack.name
     button.onclick = () => {
-      console.log('Before:', draggle.health)
       emby.attack(attack, draggle, renderedSprites)
-      console.log('After:', draggle.health)
 
       if (draggle.health === 0) {
+        audio.victory.play()
+        audio.battle.stop()
+        audio.map.play()
         queue.push(() => draggle.faint())
         queue.push(() => {
           gsap.to('.battle-overlay', {
@@ -118,6 +120,8 @@ export function initBattle() {
           )
 
           if (emby.health === 0) {
+            audio.battle.stop()
+            audio.map.play()
             queue.push(() => emby.faint())
             queue.push(() => {
               gsap.to('.battle-overlay', {

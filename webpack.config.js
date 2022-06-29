@@ -15,7 +15,7 @@ module.exports = {
         use: ['style-loader', 'css-loader'],
       },
       {
-        test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        test: /\.(png|svg|jpg|jpeg|gif|wav|mp3)$/i,
         type: 'asset/resource',
       },
     ],
@@ -33,5 +33,5 @@ module.exports = {
     },
     port: 3000,
   },
-  devtool: 'inline-source-map'
+  devtool: 'inline-source-map',
 }

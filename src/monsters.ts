@@ -35,6 +35,6 @@ export const monsters = {
       },
       animate: true,
     },
-    attacks: [attacks.Tackle],
+    attacks: [attacks.Tackle, attacks.Fireball],
   },
 }
