@@ -1,80 +1,25 @@
 import '../style.css'
 import { collisions } from '../collisions'
-import { Sprite } from '../drawables/Sprite'
 import { Boundary } from '../drawables/Boundary'
-import { predictCollision, rectangularCollision } from '../CollisionHelper'
+import { getCollisionData, predictCollision, rectangularCollision } from '../CollisionHelper'
 import {
-  CANVAS_HEIGHT,
-  CANVAS_WIDTH,
-  INITIAL_X_OFFSET,
-  INITIAL_Y_OFFSET,
-  MAP_COLS,
-  MAP_ROWS,
-  MAP_SCALING,
   PLAYER_SPEED,
   SHOW_COLLIDERS,
 } from '../Settings'
 import { battlePatches } from '../data/battlePatches'
-import { animateBattleActivation } from '../AnimationHelper'
-import { initBattle } from './battleScene'
 import { audio } from '../data/audio'
 import { sprites } from '../data/sprites'
 
+// Get canvas handle
 const canvas = document.querySelector('canvas')!
 const ctx = canvas.getContext('2d')!
-canvas.width = CANVAS_WIDTH
-canvas.height = CANVAS_HEIGHT
-ctx.imageSmoothingEnabled = false
 
+// Prepare collision boundaries
+const boundaries: Boundary[] = getCollisionData(collisions)
+const battleZones: Boundary[] = getCollisionData(battlePatches)
 
-
-const collisionArrays = []
-for (let y = 0; y < MAP_ROWS; y++) {
-  collisionArrays.push(collisions.slice(y * MAP_COLS, y * MAP_COLS + MAP_COLS))
-}
-
-const boundaries: Boundary[] = []
-collisionArrays.forEach((row, rowIndex) =>
-  row.forEach((entry, colIndex) => {
-    if (entry === 1025) {
-      boundaries.push(
-        new Boundary({
-          position: {
-            x: colIndex * Boundary.size + INITIAL_X_OFFSET,
-            y: rowIndex * Boundary.size + INITIAL_Y_OFFSET,
-          },
-          context: ctx,
-        })
-      )
-    }
-  })
-)
-
-const battlePatchArrays = []
-for (let y = 0; y < MAP_ROWS; y++) {
-  battlePatchArrays.push(
-    battlePatches.slice(y * MAP_COLS, y * MAP_COLS + MAP_COLS)
-  )
-}
-
-const battleZones: Boundary[] = []
-battlePatchArrays.forEach((row, rowIndex) =>
-  row.forEach((entry, colIndex) => {
-    if (entry === 1025) {
-      battleZones.push(
-        new Boundary({
-          position: {
-            x: colIndex * Boundary.size + INITIAL_X_OFFSET,
-            y: rowIndex * Boundary.size + INITIAL_Y_OFFSET,
-          },
-          context: ctx,
-        })
-      )
-    }
-  })
-)
-
-let keys = {
+// Keyboard helper
+const keys = {
   up: {
     isPressed: false,
   },
@@ -89,13 +34,16 @@ let keys = {
   },
 }
 
+// Prepare movable sprites
 const background = sprites.background
 const foreground = sprites.foreground
 const player = sprites.player
 
 const movables = [background, foreground, ...battleZones, ...boundaries]
 
-export const battle = {
+
+// Battle transition logic
+const battle = {
   initiated: false,
 }
 
@@ -105,9 +53,8 @@ function transitionToBattle(currentAnimationId: number) {
   battle.initiated = true
   audio.map.stop()
   audio.initBattle.play()
-  audio.battle.play()
 
-  animateBattleActivation(initBattle)
+  // animateBattleActivation(initBattle)
 }
 
 /*
@@ -124,13 +71,13 @@ export function animateMap() {
 
   // Show debug colliders
   if (SHOW_COLLIDERS) {
-    boundaries.forEach((boundary) => boundary.draw())
-    battleZones.forEach((zone) => zone.draw())
+    boundaries.forEach((boundary) => boundary.draw(ctx))
+    battleZones.forEach((zone) => zone.draw(ctx))
   }
 
   // Battle is running
   if (battle.initiated) return
-  
+
   // Check for battle activation
   if (
     player.animate &&
@@ -228,5 +175,12 @@ function keyUpListener(e: KeyboardEvent) {
       break
   }
 }
-window.addEventListener('keydown', keyDownListener)
-window.addEventListener('keyup', keyUpListener)
+
+export function initMap() {
+  audio.map.play()
+  animateMap()
+
+  window.addEventListener('keydown', keyDownListener)
+  window.addEventListener('keyup', keyUpListener)
+  battle.initiated = false
+}

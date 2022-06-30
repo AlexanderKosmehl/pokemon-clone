@@ -1,4 +1,18 @@
 import { initMap } from './scenes/mapScene'
+import {
+  CANVAS_WIDTH,
+  CANVAS_HEIGHT,
+  INITIAL_X_OFFSET,
+  INITIAL_Y_OFFSET,
+  MAP_SCALING,
+} from './Settings'
+
+// Configure canvas for game
+const canvas = document.querySelector('canvas')!
+const ctx = canvas.getContext('2d')!
+canvas.width = CANVAS_WIDTH
+canvas.height = CANVAS_HEIGHT
+ctx.imageSmoothingEnabled = false
 
 // Initialize game
 function startGame() {
@@ -9,11 +23,7 @@ function startGame() {
 window.addEventListener('click', startGame)
 
 // Render placeholder background until game is started
-const canvas = document.querySelector('canvas')!
-const ctx = canvas.getContext('2d')!
-
 import backgroundPlaceholderURI from './img/pokemonCloneMap.png'
-import { INITIAL_X_OFFSET, INITIAL_Y_OFFSET, MAP_SCALING } from './Settings'
 const placeholderImage = new Image()
 placeholderImage.onload = () => {
   ctx.drawImage(
