@@ -1,10 +1,8 @@
-import { audio } from './data/audio'
-import { animateMap } from './scenes/mapScene'
+import { initMap } from './scenes/mapScene'
 
 // Initialize game
 function startGame() {
-  audio.map.play()
-  animateMap()
+  initMap()
   window.removeEventListener('click', startGame)
 }
 
