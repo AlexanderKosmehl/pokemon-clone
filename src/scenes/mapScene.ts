@@ -1,11 +1,4 @@
 import '../style.css'
-import mapImageURI from '../img/pokemonCloneMap.png'
-import foregroundLayerURI from '../img/pokemonCloneMapForeground.png'
-import playerDownURI from '../img/playerDown.png'
-import playerUpURI from '../img/playerUp.png'
-import playerLeftURI from '../img/playerLeft.png'
-import playerRightURI from '../img/playerRight.png'
-
 import { collisions } from '../collisions'
 import { Sprite } from '../drawables/Sprite'
 import { Boundary } from '../drawables/Boundary'
@@ -25,6 +18,7 @@ import { battlePatches } from '../data/battlePatches'
 import { animateBattleActivation } from '../AnimationHelper'
 import { initBattle } from './battleScene'
 import { audio } from '../data/audio'
+import { sprites } from '../data/sprites'
 
 const canvas = document.querySelector('canvas')!
 const ctx = canvas.getContext('2d')!
@@ -32,20 +26,7 @@ canvas.width = CANVAS_WIDTH
 canvas.height = CANVAS_HEIGHT
 ctx.imageSmoothingEnabled = false
 
-const mapImage = new Image()
-mapImage.src = mapImageURI
 
-const foregroundImage = new Image()
-foregroundImage.src = foregroundLayerURI
-
-const playerUpImage = new Image()
-playerUpImage.src = playerUpURI
-const playerDownImage = new Image()
-playerDownImage.src = playerDownURI
-const playerLeftImage = new Image()
-playerLeftImage.src = playerLeftURI
-const playerRightImage = new Image()
-playerRightImage.src = playerRightURI
 
 const collisionArrays = []
 for (let y = 0; y < MAP_ROWS; y++) {
@@ -93,36 +74,6 @@ battlePatchArrays.forEach((row, rowIndex) =>
   })
 )
 
-const background = new Sprite({
-  position: { x: INITIAL_X_OFFSET, y: INITIAL_Y_OFFSET },
-  image: mapImage,
-  context: ctx,
-  scale: MAP_SCALING,
-})
-
-const foreground = new Sprite({
-  position: { x: INITIAL_X_OFFSET, y: INITIAL_Y_OFFSET },
-  image: foregroundImage,
-  context: ctx,
-  scale: MAP_SCALING,
-})
-
-const player = new Sprite({
-  position: {
-    x: canvas.width / 2 - 192 / 4 / 2,
-    y: canvas.height / 2 - 68 / 2,
-  },
-  image: playerDownImage,
-  frames: { max: 4, hold: 10 },
-  context: ctx,
-  sprites: {
-    up: playerUpImage,
-    down: playerDownImage,
-    left: playerLeftImage,
-    right: playerRightImage,
-  },
-})
-
 let keys = {
   up: {
     isPressed: false,
@@ -138,10 +89,25 @@ let keys = {
   },
 }
 
+const background = sprites.background
+const foreground = sprites.foreground
+const player = sprites.player
+
 const movables = [background, foreground, ...battleZones, ...boundaries]
 
 export const battle = {
   initiated: false,
+}
+
+function transitionToBattle(currentAnimationId: number) {
+  window.cancelAnimationFrame(currentAnimationId)
+  player.animate = false
+  battle.initiated = true
+  audio.map.stop()
+  audio.initBattle.play()
+  audio.battle.play()
+
+  animateBattleActivation(initBattle)
 }
 
 /*
@@ -152,9 +118,9 @@ export function animateMap() {
   // Get animationId to cancel animation later
   const animationId = window.requestAnimationFrame(animateMap)
 
-  background.draw()
-  player.draw()
-  foreground.draw()
+  background.draw(ctx)
+  player.draw(ctx)
+  foreground.draw(ctx)
 
   // Show debug colliders
   if (SHOW_COLLIDERS) {
@@ -162,24 +128,16 @@ export function animateMap() {
     battleZones.forEach((zone) => zone.draw())
   }
 
-  // Check for battle activation
-
+  // Battle is running
   if (battle.initiated) return
-
+  
+  // Check for battle activation
   if (
     player.animate &&
     battleZones.some((zone) => rectangularCollision(player, zone)) &&
     Math.random() < 0.01
   ) {
-    window.cancelAnimationFrame(animationId)
-    player.animate = false
-    battle.initiated = true
-    audio.map.stop()
-    audio.initBattle.play()
-    audio.battle.play()
-
-    animateBattleActivation(initBattle)
-
+    transitionToBattle(animationId)
     return
   }
 
@@ -229,7 +187,7 @@ export function animateMap() {
   Click Listener
 */
 
-window.addEventListener('keydown', (e: KeyboardEvent) => {
+function keyDownListener(e: KeyboardEvent) {
   switch (e.key) {
     case 'w':
     case 'ArrowUp':
@@ -248,9 +206,9 @@ window.addEventListener('keydown', (e: KeyboardEvent) => {
       keys.right.isPressed = true
       break
   }
-})
+}
 
-window.addEventListener('keyup', (e: KeyboardEvent) => {
+function keyUpListener(e: KeyboardEvent) {
   switch (e.key) {
     case 'w':
     case 'ArrowUp':
@@ -269,5 +227,6 @@ window.addEventListener('keyup', (e: KeyboardEvent) => {
       keys.right.isPressed = false
       break
   }
-})
-
+}
+window.addEventListener('keydown', keyDownListener)
+window.addEventListener('keyup', keyUpListener)

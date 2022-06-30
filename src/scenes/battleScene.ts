@@ -1,27 +1,20 @@
 import { animateMap, battle } from './mapScene'
 import { Attack } from '../interfaces/Attack'
-import battleBackgroundURI from '../img/battleBackground.png'
 import { Monster } from '../drawables/Monster'
 import { monsters } from '../data/monsters'
 import { Sprite } from '../drawables/Sprite'
 
 import gsap from 'gsap'
 import { audio } from '../data/audio'
+import { sprites } from '../data/sprites'
 
 const canvas = document.querySelector('canvas')!
 const ctx = canvas.getContext('2d')!
 
-const battleBackgroundImage = new Image()
-battleBackgroundImage.src = battleBackgroundURI
-
 let draggle: Monster
 let emby: Monster
 
-const battleBackground = new Sprite({
-  position: { x: 0, y: 0 },
-  image: battleBackgroundImage,
-  context: ctx,
-})
+const battleBackground = sprites.battleBackground
 
 const renderedSprites: Sprite[] = []
 
@@ -60,7 +53,6 @@ export function initBattle() {
       y: 100,
     },
     ...monsters.Draggle.sprite,
-    context: ctx,
     isEnemy: true,
     name: monsters.Draggle.name,
   })
@@ -71,7 +63,6 @@ export function initBattle() {
       y: 325,
     },
     ...monsters.Emby.sprite,
-    context: ctx,
     name: monsters.Emby.name,
   })
 
@@ -167,8 +158,8 @@ export function initBattle() {
 
 export function animateBattle() {
   battleAnimationId = window.requestAnimationFrame(animateBattle)
-  battleBackground.draw()
-  draggle.draw()
-  renderedSprites.forEach((sprite) => sprite.draw())
-  emby.draw()
+  battleBackground.draw(ctx)
+  draggle.draw(ctx)
+  renderedSprites.forEach((sprite) => sprite.draw(ctx))
+  emby.draw(ctx)
 }

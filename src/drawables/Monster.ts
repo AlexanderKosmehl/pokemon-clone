@@ -19,7 +19,6 @@ export class Monster extends Sprite {
     image,
     frames = { max: 1, hold: 10 },
     scale = 1,
-    context,
     sprites,
     animate = false,
     rotation = 0,
@@ -31,7 +30,6 @@ export class Monster extends Sprite {
       image,
       frames,
       scale,
-      context,
       sprites,
       animate,
       rotation,
@@ -95,7 +93,6 @@ export class Monster extends Sprite {
             y: this.position.y,
           },
           image: fireballImage,
-          context: this.context,
           frames: {
             max: 4,
             hold: 10,

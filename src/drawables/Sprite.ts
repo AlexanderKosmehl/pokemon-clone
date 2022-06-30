@@ -5,7 +5,6 @@ export interface SpriteProps {
   image: { src: string }
   frames?: { max: number; hold: number }
   scale?: number
-  context: CanvasRenderingContext2D
   sprites?: {
     up: HTMLImageElement
     down: HTMLImageElement
@@ -26,7 +25,6 @@ export class Sprite {
     hold: number
   }
   scale: number
-  context: CanvasRenderingContext2D
   height: number = 0
   width: number = 0
   animate: boolean
@@ -44,7 +42,6 @@ export class Sprite {
     image,
     frames = { max: 1, hold: 10 },
     scale = 1,
-    context,
     sprites,
     animate = false,
     rotation = 0,
@@ -52,7 +49,6 @@ export class Sprite {
     this.position = position
     this.frames = { ...frames, val: 0, elapsed: 0 }
     this.scale = scale
-    this.context = context
     this.sprites = sprites
     this.animate = animate
     this.rotation = rotation
@@ -65,19 +61,19 @@ export class Sprite {
     this.image.src = image.src
   }
 
-  draw() {
-    this.context.save()
-    this.context.translate(
+  draw(context: CanvasRenderingContext2D) {
+    context.save()
+    context.translate(
       this.position.x + this.width / 2,
       this.position.y + this.height / 2
     )
-    this.context.rotate(this.rotation)
-    this.context.translate(
+    context.rotate(this.rotation)
+    context.translate(
       -this.position.x - this.width / 2,
       -this.position.y - this.height / 2
     )
-    this.context.globalAlpha = this.opacity
-    this.context.drawImage(
+    context.globalAlpha = this.opacity
+    context.drawImage(
       this.image,
       this.frames.val * this.width,
       0,
@@ -88,7 +84,7 @@ export class Sprite {
       this.width * this.scale,
       this.height * this.scale
     )
-    this.context.restore()
+    context.restore()
 
     if (!this.animate) {
       this.frames.elapsed = 0
