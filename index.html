@@ -1,19 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pokemon Clone</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-    <script defer src="./dist/main.js"></script>
-  </head>
-  <body>
-    <div class="game-container">
-      <div class="battle-overlay"></div>
-      <canvas></canvas>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pokemon Clone</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="./pokemon-clone-icon.png">
+  <script defer src="./dist/main.js"></script>
+</head>
+
+<body>
+  <div class="game-container">
+    <div class="battle-overlay"></div>
+    <canvas></canvas>
+    <div class="battle-interface">
       <div class="enemy-info-container">
         <h1>Draggle</h1>
         <div class="health-bar">
@@ -22,25 +26,24 @@
       </div>
       <div class="player-info-container">
         <h1>Emby</h2>
-        <div class="health-bar">
-          <div class="player-health-bar-current"></div>
-        </div>
+          <div class="health-bar">
+            <div class="player-health-bar-current"></div>
+          </div>
       </div>
       <div class="controls-container">
         <div class="attack-container">
         </div>
-        <div class="attack-type-container">
-          <h1>
-            Attack Type: 
-            <span class="attack-type"></span> 
-          </h1>
-          <h1>
-            Power: 
-            <span class="attack-power"></span>
-          </h1>
+        <div class="attack-info-container">
+          <h1 class="attack-info-header">Attack Information</h1>
+          <h1>Type:</h1>
+          <h1 class="attack-type"></h1>
+          <h1>Power:</h1>
+          <h1 class="attack-power"></h1>
         </div>
         <div class="dialogue-box"></div>
       </div>
-    </body>
+    </div>
   </div>
+</body>
+
 </html>
