@@ -82,7 +82,6 @@ export function initBattle() {
       emby.attack(attack, draggle, renderedSprites)
 
       if (draggle.health === 0) {
-        audio.victory.play()
         audio.battle.stop()
         audio.map.play()
         queue.push(() => draggle.faint())
@@ -103,6 +102,7 @@ export function initBattle() {
               })
 
               battle.initiated = false
+              dialogueBox.style.display = 'none'
             },
           })
         })
@@ -140,6 +140,7 @@ export function initBattle() {
                   })
 
                   battle.initiated = false
+                  dialogueBox.style.display = 'none'
                 },
               })
             })

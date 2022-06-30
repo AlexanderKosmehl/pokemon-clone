@@ -11,36 +11,36 @@ export const audio = {
   map: new Howl({
     src: mapThemeURI,
     html5: true,
-    volume: 0.2,
+    volume: 0.1,
   }),
   initBattle: new Howl({
     src: initBattleThemeURI,
     html5: true,
-    volume: 0.2,
+    volume: 0.1,
   }),
   battle: new Howl({
     src: battleThemeURI,
     html5: true,
-    volume: 0.2,
+    volume: 0.1,
   }),
   victory: new Howl({
     src: victoryThemeURI,
     html5: true,
-    volume: 0.2,
+    volume: 0.1,
   }),
   tackleHit: new Howl({
     src: tackleHitURI,
     html5: true,
-    volume: 0.2,
+    volume: 0.1,
   }),
   initFireball: new Howl({
     src: initFireballURI,
     html5: true,
-    volume: 0.2,
+    volume: 0.1,
   }),
   fireballHit: new Howl({
     src: fireballHitURI,
     html5: true,
-    volume: 0.2,
+    volume: 0.1,
   }),
 }
