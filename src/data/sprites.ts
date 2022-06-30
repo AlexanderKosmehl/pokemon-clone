@@ -7,6 +7,8 @@ import playerUpURI from '../img/playerUp.png'
 import playerLeftURI from '../img/playerLeft.png'
 import playerRightURI from '../img/playerRight.png'
 import battleBackgroundURI from '../img/battleBackground.png'
+import embyURI from '../img/embySprite.png'
+import draggleURI from '../img/draggleSprite.png'
 
 import {
   CANVAS_HEIGHT,
@@ -16,33 +18,15 @@ import {
   MAP_SCALING,
 } from '../Settings'
 
-const mapImage = new Image()
-mapImage.src = mapImageURI
-
-const foregroundImage = new Image()
-foregroundImage.src = foregroundLayerURI
-
-const playerUpImage = new Image()
-playerUpImage.src = playerUpURI
-const playerDownImage = new Image()
-playerDownImage.src = playerDownURI
-const playerLeftImage = new Image()
-playerLeftImage.src = playerLeftURI
-const playerRightImage = new Image()
-playerRightImage.src = playerRightURI
-
-const battleBackgroundImage = new Image()
-battleBackgroundImage.src = battleBackgroundURI
-
 export const sprites = {
   background: new Sprite({
     position: { x: INITIAL_X_OFFSET, y: INITIAL_Y_OFFSET },
-    image: mapImage,
+    imageSrc: mapImageURI,
     scale: MAP_SCALING,
   }),
   foreground: new Sprite({
     position: { x: INITIAL_X_OFFSET, y: INITIAL_Y_OFFSET },
-    image: foregroundImage,
+    imageSrc: foregroundLayerURI,
     scale: MAP_SCALING,
   }),
   player: new Sprite({
@@ -50,17 +34,41 @@ export const sprites = {
       x: CANVAS_WIDTH / 2 - 192 / 4 / 2,
       y: CANVAS_HEIGHT / 2 - 68 / 2,
     },
-    image: playerDownImage,
+    imageSrc: playerDownURI,
     frames: { max: 4, hold: 10 },
-    sprites: {
-      up: playerUpImage,
-      down: playerDownImage,
-      left: playerLeftImage,
-      right: playerRightImage,
+    rotationSources: {
+      up: playerUpURI,
+      down: playerDownURI,
+      left: playerLeftURI,
+      right: playerRightURI,
     },
   }),
   battleBackground: new Sprite({
     position: { x: 0, y: 0 },
-    image: battleBackgroundImage,
+    imageSrc: battleBackgroundURI,
+  }),
+  emby: new Sprite({
+    imageSrc: embyURI,
+    frames: {
+      max: 4,
+      hold: 30,
+    },
+    animate: true,
+    position: {
+      x: 0,
+      y: 0,
+    },
+  }),
+  draggle: new Sprite({
+    imageSrc: draggleURI,
+    frames: {
+      max: 4,
+      hold: 30,
+    },
+    animate: true,
+    position: {
+      x: 0,
+      y: 0,
+    },
   }),
 }

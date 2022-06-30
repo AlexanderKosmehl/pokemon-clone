@@ -12,5 +12,11 @@ export const MAP_SCALING = 4
 export const MAP_ROWS = 50
 export const MAP_COLS = 70
 
+// Battle Settings
+export const PLAYER_X = 280
+export const PLAYER_Y = 325
+export const ENEMY_X = 800
+export const ENEMY_Y = 100
+
 // Debug Settings
 export const SHOW_COLLIDERS = false

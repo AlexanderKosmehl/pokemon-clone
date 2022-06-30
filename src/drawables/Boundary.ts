@@ -6,18 +6,16 @@ export class Boundary {
   position: Position
   width: number
   height: number
-  context: CanvasRenderingContext2D
 
-  constructor({ position, context }: any) {
+  constructor({ position }: any) {
     this.position = position
     this.width = 48
     this.height = 48
-    this.context = context
   }
 
-  draw() {
-    this.context.fillStyle = 'rgba(255, 0, 0, 0.2)'
-    this.context.fillRect(
+  draw(context: CanvasRenderingContext2D) {
+    context.fillStyle = 'rgba(255, 0, 0, 0.2)'
+    context.fillRect(
       this.position.x,
       this.position.y,
       this.width,

@@ -1,40 +1,20 @@
+import { MonsterData } from '../interfaces/MonsterData'
 import { attacks } from './attacks'
-import draggleURI from '../img/draggleSprite.png'
-import embyURI from '../img/embySprite.png'
+import { sprites } from './sprites'
 
-const draggleImage = new Image()
-draggleImage.src = draggleURI
-
-const embyImage = new Image()
-embyImage.src = embyURI
-
-export const monsters = {
+export const monsterData: Record<string, MonsterData> = {
   Emby: {
     name: 'Emby',
-    sprite: {
-      image: {
-        src: embyURI,
-      },
-      frames: {
-        max: 4,
-        hold: 30,
-      },
-      animate: true,
-    },
+    health: 100,
+    speed: 100,
+    sprite: sprites.emby,
     attacks: [attacks.Tackle, attacks.Fireball],
   },
   Draggle: {
     name: 'Draggle',
-    sprite: {
-      image: {
-        src: draggleURI,
-      },
-      frames: {
-        max: 4,
-        hold: 30,
-      },
-      animate: true,
-    },
+    health: 80,
+    speed: 80,
+    sprite: sprites.draggle,
     attacks: [attacks.Tackle, attacks.Fireball],
   },
 }

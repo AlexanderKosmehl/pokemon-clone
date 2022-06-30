@@ -1,5 +1,12 @@
+import { Boundary } from './drawables/Boundary'
 import { Position } from './interfaces/Position'
-import { PLAYER_SPEED } from './Settings'
+import {
+  INITIAL_X_OFFSET,
+  INITIAL_Y_OFFSET,
+  MAP_COLS,
+  MAP_ROWS,
+  PLAYER_SPEED,
+} from './Settings'
 
 interface Collidable {
   position: Position
@@ -74,4 +81,30 @@ export function predictCollision(
       )
     }
   }
+}
+
+export function getCollisionData(collisionMap: number[]): Boundary[] {
+  const collisionArrays: number[][] = []
+  const collisionDataArray: Boundary[] = []
+  for (let y = 0; y < MAP_ROWS; y++) {
+    collisionArrays.push(
+      collisionMap.slice(y * MAP_COLS, y * MAP_COLS + MAP_COLS)
+    )
+  }
+  collisionArrays.forEach((row, rowIndex) =>
+    row.forEach((entry, colIndex) => {
+      if (entry === 1025) {
+        collisionDataArray.push(
+          new Boundary({
+            position: {
+              x: colIndex * Boundary.size + INITIAL_X_OFFSET,
+              y: rowIndex * Boundary.size + INITIAL_Y_OFFSET,
+            },
+          })
+        )
+      }
+    })
+  )
+
+  return collisionDataArray
 }

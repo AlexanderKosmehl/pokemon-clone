@@ -1,5 +1,5 @@
 import '../style.css'
-import { collisions } from '../collisions'
+import { collisions } from '../data/collisions'
 import { Boundary } from '../drawables/Boundary'
 import { getCollisionData, predictCollision, rectangularCollision } from '../CollisionHelper'
 import {
@@ -9,6 +9,8 @@ import {
 import { battlePatches } from '../data/battlePatches'
 import { audio } from '../data/audio'
 import { sprites } from '../data/sprites'
+import { animateBattleActivation } from '../AnimationHelper'
+import { initBattle } from './battleScene'
 
 // Get canvas handle
 const canvas = document.querySelector('canvas')!
@@ -54,7 +56,7 @@ function transitionToBattle(currentAnimationId: number) {
   audio.map.stop()
   audio.initBattle.play()
 
-  // animateBattleActivation(initBattle)
+  animateBattleActivation(initBattle)
 }
 
 /*

@@ -12,6 +12,7 @@ export const audio = {
     src: mapThemeURI,
     html5: true,
     volume: 0.1,
+    loop: true,
   }),
   initBattle: new Howl({
     src: initBattleThemeURI,
@@ -22,6 +23,7 @@ export const audio = {
     src: battleThemeURI,
     html5: true,
     volume: 0.1,
+    loop: true,
   }),
   victory: new Howl({
     src: victoryThemeURI,
