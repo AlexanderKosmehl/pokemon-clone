@@ -1,11 +1,11 @@
 import { Howl } from 'howler'
-import mapThemeURI from './audio/map.wav'
-import initBattleThemeURI from './audio/initBattle.wav'
-import battleThemeURI from './audio/battle.mp3'
-import tackleHitURI from './audio/tackleHit.wav'
-import initFireballURI from './audio/initFireball.wav'
-import fireballHitURI from './audio/fireballHit.wav'
-import victoryThemeURI from './audio/victory.wav'
+import mapThemeURI from '../audio/map.wav'
+import initBattleThemeURI from '../audio/initBattle.wav'
+import battleThemeURI from '../audio/battle.mp3'
+import tackleHitURI from '../audio/tackleHit.wav'
+import initFireballURI from '../audio/initFireball.wav'
+import fireballHitURI from '../audio/fireballHit.wav'
+import victoryThemeURI from '../audio/victory.wav'
 
 export const audio = {
   map: new Howl({

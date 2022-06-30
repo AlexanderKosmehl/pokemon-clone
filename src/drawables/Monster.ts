@@ -1,8 +1,8 @@
 import { Sprite, SpriteProps } from './Sprite'
 import gsap from 'gsap'
-import fireballURI from './img/fireball.png'
-import { Attack } from './Attack'
-import { audio } from './audio'
+import fireballURI from '../img/fireball.png'
+import { Attack } from '../interfaces/Attack'
+import { audio } from '../data/audio'
 
 interface MonsterProps extends SpriteProps {
   name?: string

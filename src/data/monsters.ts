@@ -1,6 +1,6 @@
 import { attacks } from './attacks'
-import draggleURI from './img/draggleSprite.png'
-import embyURI from './img/embySprite.png'
+import draggleURI from '../img/draggleSprite.png'
+import embyURI from '../img/embySprite.png'
 
 const draggleImage = new Image()
 draggleImage.src = draggleURI

@@ -1,4 +1,4 @@
-import { Position } from './Position'
+import { Position } from './interfaces/Position'
 import { PLAYER_SPEED } from './Settings'
 
 interface Collidable {

@@ -1,12 +1,12 @@
-import { animate, battle } from '.'
-import { Attack } from './Attack'
-import battleBackgroundURI from './img/battleBackground.png'
-import { Monster } from './Monster'
-import { monsters } from './monsters'
-import { Sprite } from './Sprite'
+import { animateMap, battle } from './mapScene'
+import { Attack } from '../interfaces/Attack'
+import battleBackgroundURI from '../img/battleBackground.png'
+import { Monster } from '../drawables/Monster'
+import { monsters } from '../data/monsters'
+import { Sprite } from '../drawables/Sprite'
 
 import gsap from 'gsap'
-import { audio } from './audio'
+import { audio } from '../data/audio'
 
 const canvas = document.querySelector('canvas')!
 const ctx = canvas.getContext('2d')!
@@ -91,7 +91,7 @@ export function initBattle() {
             opacity: 1,
             onComplete: () => {
               cancelAnimationFrame(battleAnimationId)
-              animate()
+              animateMap()
 
               const battleInterface = document.querySelector(
                 '.battle-interface'
@@ -128,7 +128,7 @@ export function initBattle() {
                 opacity: 1,
                 onComplete: () => {
                   cancelAnimationFrame(battleAnimationId)
-                  animate()
+                  animateMap()
 
                   const battleInterface = document.querySelector(
                     '.battle-interface'

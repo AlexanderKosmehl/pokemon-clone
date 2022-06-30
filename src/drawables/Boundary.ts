@@ -1,4 +1,4 @@
-import { Position } from './Position'
+import { Position } from '../interfaces/Position'
 
 export class Boundary {
   static size: number = 48
